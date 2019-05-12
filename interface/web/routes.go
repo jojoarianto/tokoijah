@@ -20,7 +20,10 @@ func Routes() *httprouter.Router {
 
 	// Index Route
 	r.GET("/", index)
+
+	// Route for Product
 	r.GET("/products", getAllProduct)
+	r.POST("/products", addProduct)
 
 	return r
 }

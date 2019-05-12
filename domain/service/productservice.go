@@ -5,5 +5,6 @@ import (
 )
 
 type ProductService interface {
+	Add(model.Product) error
 	GetAll() ([]model.Product, error)
 }
