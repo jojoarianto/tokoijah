@@ -29,5 +29,5 @@ func Routes() *httprouter.Router {
 }
 
 func index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	JSON(w, http.StatusOK, "TokoIjah API")
+	RespondWithJSON(w, http.StatusOK, "TokoIjah API")
 }

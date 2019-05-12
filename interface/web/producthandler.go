@@ -2,7 +2,6 @@ package web
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/jojoarianto/tokoijah/config"
@@ -25,11 +24,12 @@ func getAllProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
 	conf := config.NewConfig(Dialeg, URIDbConn)
 	db, err := conf.ConnectDB()
 	if err != nil {
-		JSON(w, http.StatusInternalServerError, products)
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
 	}
 	defer db.Close()
 
-	JSON(w, http.StatusOK, products)
+	RespondWithJSON(w, http.StatusOK, products)
 }
 
 func addProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -37,23 +37,25 @@ func addProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&product); err != nil {
-		JSON(w, http.StatusBadRequest, product)
+		RespondWithError(w, http.StatusBadRequest, model.ErrBadParamInput.Error())
+		return
 	}
 	defer r.Body.Close()
 
 	conf := config.NewConfig(Dialeg, URIDbConn)
 	db, err := conf.ConnectDB()
 	if err != nil {
-		JSON(w, http.StatusInternalServerError, product)
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
 	}
 	defer db.Close()
 
 	productsvc := service.NewProductService(sqlite3.NewProductRepo(db))
 	err = productsvc.Add(product)
 	if err != nil {
-		log.Println(err)
-		JSON(w, http.StatusInternalServerError, product)
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
 	}
 
-	JSON(w, http.StatusCreated, product)
+	RespondWithJSON(w, http.StatusCreated, product)
 }
