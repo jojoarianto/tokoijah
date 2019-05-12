@@ -18,7 +18,7 @@ func NewProductService(productRepo repository.ProductRepo) *productService {
 
 // GetAll service to retrieve all data product
 func (ps *productService) GetAll() ([]model.Product, error) {
-	products, err := ps.GetAll()
+	products, err := ps.productRepo.GetAll()
 	if err != nil {
 		return products, err
 	}

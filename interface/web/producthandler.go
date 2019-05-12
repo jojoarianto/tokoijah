@@ -29,6 +29,13 @@ func getAllProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
 	}
 	defer db.Close()
 
+	productsvc := service.NewProductService(sqlite3.NewProductRepo(db))
+	products, err = productsvc.GetAll()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
+	}
+
 	RespondWithJSON(w, http.StatusOK, products)
 }
 
