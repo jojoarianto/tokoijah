@@ -24,6 +24,31 @@ const (
 	Dialeg = "sqlite3"
 )
 
+func getProductByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	productID, err := strconv.Atoi(ps.ByName("product_id"))
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, model.ErrBadParamInput.Error())
+		return
+	}
+
+	conf := config.NewConfig(Dialeg, URIDbConn)
+	db, err := conf.ConnectDB()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
+	}
+	defer db.Close()
+
+	productsvc := service.NewProductService(sqlite3.NewProductRepo(db))
+	product, err := productsvc.GetByID(productID)
+	if err != nil {
+		RespondWithError(w, http.StatusNotFound, model.ErrNotFound.Error())
+		return
+	}
+
+	RespondWithJSON(w, http.StatusOK, product)
+}
+
 func getAllProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	products := []model.Product{}
 

@@ -25,6 +25,15 @@ func (ps *productService) GetAll() ([]model.Product, error) {
 	return products, nil
 }
 
+// GetByID service to retrieve a data product by id
+func (ps *productService) GetByID(productID int) (model.Product, error) {
+	product, err := ps.productRepo.GetByID(productID)
+	if err != nil {
+		return product, err
+	}
+	return product, nil
+}
+
 // Add service to create new product
 func (ps *productService) Add(product model.Product) error {
 	err := ps.productRepo.Add(product)
