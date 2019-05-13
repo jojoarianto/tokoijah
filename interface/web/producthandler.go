@@ -9,6 +9,7 @@ import (
 	"github.com/jojoarianto/tokoijah/infrastructure/sqlite3"
 	"github.com/jojoarianto/tokoijah/service"
 	"github.com/julienschmidt/httprouter"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 const (
@@ -48,6 +49,12 @@ func addProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		return
 	}
 	defer r.Body.Close()
+
+	validate := validator.New()
+	if err := validate.Struct(product); err != nil {
+		RespondWithError(w, http.StatusBadRequest, model.ErrBadParamInput.Error())
+		return
+	}
 
 	conf := config.NewConfig(Dialeg, URIDbConn)
 	db, err := conf.ConnectDB()
