@@ -1,6 +1,8 @@
 package sqlite3
 
 import (
+	"fmt"
+
 	"github.com/jinzhu/gorm"
 	"github.com/jojoarianto/tokoijah/domain/model"
 	"github.com/jojoarianto/tokoijah/domain/repository"
@@ -29,5 +31,15 @@ func (pr *productRepo) Add(product model.Product) error {
 	if err := pr.Conn.Save(&product).Error; err != nil {
 		return err
 	}
+	return nil
+}
+
+// AddMany method to add many new products
+func (pr *productRepo) AddMany(products []model.Product) error {
+	var sqlStr string
+	for _, product := range products {
+		sqlStr += fmt.Sprintf("INSERT INTO products (created_at, updated_at, sku, name, stocks) VALUES (datetime('now','localtime'), datetime('now','localtime'),'%s', '%s', %d); ", product.Sku, product.Name, product.Stocks)
+	}
+	pr.Conn.Exec(sqlStr)
 	return nil
 }

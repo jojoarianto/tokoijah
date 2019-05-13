@@ -33,3 +33,12 @@ func (ps *productService) Add(product model.Product) error {
 	}
 	return nil
 }
+
+// AddMany service to insert many product to db
+func (ps *productService) AddMany(products []model.Product) error {
+	err := ps.productRepo.AddMany(products)
+	if err != nil {
+		return err
+	}
+	return nil
+}
