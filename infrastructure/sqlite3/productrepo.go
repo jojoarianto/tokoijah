@@ -47,7 +47,7 @@ func (pr *productRepo) Add(product model.Product) error {
 func (pr *productRepo) AddMany(products []model.Product) error {
 	var sqlStr string
 	for _, product := range products {
-		sqlStr += fmt.Sprintf("INSERT INTO products (created_at, updated_at, sku, name, stocks) VALUES (datetime('now','localtime'), datetime('now','localtime'),'%s', '%s', %d); ", product.Sku, product.Name, product.Stocks)
+		sqlStr += fmt.Sprintf("INSERT INTO products (created_at, updated_at, sku, name) VALUES (datetime('now','localtime'), datetime('now','localtime'),'%s', '%s'); ", product.Sku, product.Name)
 	}
 	pr.Conn.Exec(sqlStr)
 	return nil

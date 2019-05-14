@@ -117,9 +117,8 @@ func importCsvProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 		}
 
 		products = append(products, model.Product{
-			Sku:    line[0],
-			Name:   line[1],
-			Stocks: 0,
+			Sku:  line[0],
+			Name: line[1],
 		})
 	}
 

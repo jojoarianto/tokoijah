@@ -48,7 +48,7 @@ func exportProductToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 		var record []string
 		record = append(record, worker.Sku)
 		record = append(record, worker.Name)
-		record = append(record, strconv.Itoa(worker.Stocks))
+		record = append(record, strconv.Itoa(worker.Stock))
 		writer.Write(record)
 	}
 
