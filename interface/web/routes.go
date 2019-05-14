@@ -41,6 +41,9 @@ func Routes() *httprouter.Router {
 	// Route for StockIn
 	r.POST("/purchases/:purchase_id/stockin", addStockIn)
 
+	// Route for Sales
+	r.POST("/sales", addSales)
+
 	// Route for import data
 	r.POST("/import/products", importCsvProduct)
 

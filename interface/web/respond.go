@@ -5,6 +5,11 @@ import (
 	"net/http"
 )
 
+type response struct {
+	Message    string `json:"Message"`
+	StatusCode int    `json:"StatusCode"`
+}
+
 // RespondWithError method to print error output for http respon
 func RespondWithError(w http.ResponseWriter, code int, msg string) {
 	RespondWithJSON(w, code, map[string]string{"error": msg})

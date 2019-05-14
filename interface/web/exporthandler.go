@@ -13,11 +13,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type response struct {
-	Message    string `json:"Message"`
-	StatusCode int    `json:"StatusCode"`
-}
-
 func exportProductToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	conf := config.NewConfig(Dialeg, URIDbConn)
 	db, err := conf.ConnectDB()

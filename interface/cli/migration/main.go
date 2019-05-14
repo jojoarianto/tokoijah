@@ -20,7 +20,7 @@ func main() {
 // DBMigrate will create and migrate the tables
 func DBMigrate(db *gorm.DB) *gorm.DB {
 
-	db.AutoMigrate(&model.Product{}, &model.Purchase{}, &model.StockIn{})
+	db.AutoMigrate(&model.Product{}, &model.Purchase{}, &model.StockIn{}, &model.Sales{}, &model.StockOut{})
 	log.Println("Schema migration has been procceed")
 
 	return db
