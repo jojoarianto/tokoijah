@@ -94,7 +94,7 @@ func exportPurchaseToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Pa
 	record = append(record, "SKU")
 	record = append(record, "Nama Barang")
 	record = append(record, "Jumlah Pemesanan")
-	record = append(record, "Harga Diterima")
+	record = append(record, "Jumlah Diterima")
 	record = append(record, "Harga Beli")
 	record = append(record, "Total")
 	record = append(record, "Nomer Kwitansi")
