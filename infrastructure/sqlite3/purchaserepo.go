@@ -22,3 +22,12 @@ func (pr *purchaseRepo) Add(purchase model.Purchase) (model.Purchase, error) {
 	}
 	return purchase, nil
 }
+
+// GetByID method to retrieve a single data purchase by id
+func (pr *purchaseRepo) GetByID(purchaseID int) (model.Purchase, error) {
+	purchase := model.Purchase{}
+	if err := pr.Conn.First(&purchase, purchaseID).Error; err != nil {
+		return purchase, err
+	}
+	return purchase, nil
+}

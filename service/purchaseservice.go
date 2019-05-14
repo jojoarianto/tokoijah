@@ -33,3 +33,12 @@ func (ps *purchaseService) Add(purchase model.Purchase) (model.Purchase, error) 
 	}
 	return purchase, nil
 }
+
+// GetByID service to retrieve a data product by id
+func (ps *purchaseService) GetByID(purchaseID int) (model.Purchase, error) {
+	purchase, err := ps.purchaseRepo.GetByID(purchaseID)
+	if err != nil {
+		return purchase, err
+	}
+	return purchase, nil
+}

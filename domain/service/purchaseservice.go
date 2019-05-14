@@ -7,4 +7,5 @@ import (
 // PurchaseService contract
 type PurchaseService interface {
 	Add(model.Purchase) (model.Purchase, error)
+	GetByID(purchaseID int) (model.Purchase, error)
 }

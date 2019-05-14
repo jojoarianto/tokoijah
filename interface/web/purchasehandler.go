@@ -3,6 +3,7 @@ package web
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/jojoarianto/tokoijah/config"
 	"github.com/jojoarianto/tokoijah/domain/model"
@@ -37,4 +38,29 @@ func addPurchase(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	RespondWithJSON(w, http.StatusCreated, purchase)
+}
+
+func getPurchaseByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	purchaseID, err := strconv.Atoi(ps.ByName("purchase_id"))
+	if err != nil {
+		RespondWithError(w, http.StatusBadRequest, model.ErrBadParamInput.Error())
+		return
+	}
+
+	conf := config.NewConfig(Dialeg, URIDbConn)
+	db, err := conf.ConnectDB()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
+	}
+	defer db.Close()
+
+	purchasesvc := service.NewPurchaseService(sqlite3.NewPurchaseRepo(db), sqlite3.NewProductRepo(db))
+	purchase, err := purchasesvc.GetByID(purchaseID)
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	RespondWithJSON(w, http.StatusOK, purchase)
 }
