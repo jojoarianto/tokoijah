@@ -7,7 +7,7 @@ import (
 // Product is data structure for product entity
 type Product struct {
 	gorm.Model
-	Sku    string `validate:"required" gorm:"type:varchar(100);unique_index" json:"sku"`
-	Name   string `validate:"required" json:"name"`
-	Stocks int    `json:"stocks"`
+	Sku    string `validate:"required" gorm:"type:varchar(100);unique_index" json:"Sku"`
+	Name   string `validate:"required" json:"Name"`
+	Stocks int    `json:"Stocks"`
 }
