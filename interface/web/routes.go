@@ -8,6 +8,13 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+const (
+	// URIDbConn database connection
+	URIDbConn = "tokoijah.sqlite3"
+	// Dialeg driver
+	Dialeg = "sqlite3"
+)
+
 // Run start server
 func Run(port int) error {
 	log.Printf("Server running at http://localhost:%d/", port)
