@@ -17,6 +17,6 @@ type Purchase struct {
 	Price        int       `validate:"required,min=1" json:"Price"`
 	TotalPrice   int       `json:"TotalPrice"`
 	Receipt      string    `json:"Receipt"`
-	Progress     []StockIn `gorm:"ForeignKey:PurchaseID" json:"StockIn"`
+	StockIn      []StockIn `gorm:"ForeignKey:PurchaseID" json:"StockIn"`
 	StausInCode  int       `json:"PurchaseCode"`
 }

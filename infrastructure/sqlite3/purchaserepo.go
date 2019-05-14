@@ -26,7 +26,7 @@ func (pr *purchaseRepo) Add(purchase model.Purchase) (model.Purchase, error) {
 // GetByID method to retrieve a single data purchase by id
 func (pr *purchaseRepo) GetByID(purchaseID int) (model.Purchase, error) {
 	purchase := model.Purchase{}
-	if err := pr.Conn.First(&purchase, purchaseID).Error; err != nil {
+	if err := pr.Conn.Preload("Product").Preload("StockIn").First(&purchase, purchaseID).Error; err != nil {
 		return purchase, err
 	}
 	return purchase, nil
@@ -35,7 +35,7 @@ func (pr *purchaseRepo) GetByID(purchaseID int) (model.Purchase, error) {
 // GetAll method to get all data purchase
 func (pr *purchaseRepo) GetAll() ([]model.Purchase, error) {
 	purchases := []model.Purchase{}
-	if err := pr.Conn.Find(&purchases).Error; err != nil {
+	if err := pr.Conn.Preload("Product").Preload("StockIn").Find(&purchases).Error; err != nil {
 		return purchases, err
 	}
 	return purchases, nil
