@@ -13,6 +13,11 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+type response struct {
+	Message    string `json:"Message"`
+	StatusCode int    `json:"StatusCode"`
+}
+
 func exportProductToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	conf := config.NewConfig(Dialeg, URIDbConn)
 	db, err := conf.ConnectDB()
@@ -54,4 +59,77 @@ func exportProductToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Par
 
 	writer.Flush()
 	RespondWithJSON(w, http.StatusCreated, products)
+	RespondWithJSON(w, http.StatusCreated, response{
+		Message:    "Export data products to csv success check your export file at _csv/export_products.csv",
+		StatusCode: 200,
+	})
+}
+
+func exportPurchaseToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	conf := config.NewConfig(Dialeg, URIDbConn)
+	db, err := conf.ConnectDB()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
+	}
+	defer db.Close()
+
+	purchasesvc := service.NewPurchaseService(sqlite3.NewPurchaseRepo(db), sqlite3.NewProductRepo(db))
+	purchases, err := purchasesvc.GetAll()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	csvData, err := os.Create("_csv/export_purchases.csv")
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
+	}
+	defer csvData.Close()
+
+	writer := csv.NewWriter(csvData)
+
+	var record []string
+	record = append(record, "Waktu")
+	record = append(record, "SKU")
+	record = append(record, "Nama Barang")
+	record = append(record, "Jumlah Pemesanan")
+	record = append(record, "Harga Diterima")
+	record = append(record, "Harga Beli")
+	record = append(record, "Total")
+	record = append(record, "Nomer Kwitansi")
+	record = append(record, "Catatan")
+	writer.Write(record)
+
+	for _, worker := range purchases {
+		var record []string
+		record = append(record, worker.PurchaseTime.Format("2006/01/02 15:04"))
+		record = append(record, worker.Product.Sku)
+		record = append(record, worker.Product.Name)
+		record = append(record, strconv.Itoa(worker.OrderQty))
+		record = append(record, strconv.Itoa(worker.ReceivedQty))
+		record = append(record, strconv.Itoa(worker.Price))
+		record = append(record, strconv.Itoa(worker.TotalPrice))
+		record = append(record, worker.Receipt)
+
+		progress := worker.StockIn
+		note := ""
+		for _, childProgress := range progress {
+			note += childProgress.StockInTime.Format("2006/01/02")
+			note += " terima " + strconv.Itoa(childProgress.Qty) + "; "
+		}
+
+		if worker.StausInCode == 0 {
+			note += "Masih menunggu"
+		}
+		record = append(record, note)
+
+		writer.Write(record)
+	}
+	writer.Flush()
+
+	RespondWithJSON(w, http.StatusCreated, response{
+		Message:    "Export data purchases to csv success check your export file at _csv/export_purchases.csv",
+		StatusCode: 200,
+	})
 }

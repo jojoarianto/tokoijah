@@ -46,6 +46,7 @@ func Routes() *httprouter.Router {
 
 	// Route for export data
 	r.GET("/export/products", exportProductToCSV)
+	r.GET("/export/purchases", exportPurchaseToCSV)
 
 	return r
 }
