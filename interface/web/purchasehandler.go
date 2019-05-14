@@ -64,3 +64,22 @@ func getPurchaseByID(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 
 	RespondWithJSON(w, http.StatusOK, purchase)
 }
+
+func getAllPurchase(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	conf := config.NewConfig(Dialeg, URIDbConn)
+	db, err := conf.ConnectDB()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
+	}
+	defer db.Close()
+
+	purchasesvc := service.NewPurchaseService(sqlite3.NewPurchaseRepo(db), sqlite3.NewProductRepo(db))
+	purchases, err := purchasesvc.GetAll()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	RespondWithJSON(w, http.StatusOK, purchases)
+}

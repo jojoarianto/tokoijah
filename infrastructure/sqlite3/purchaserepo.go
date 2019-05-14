@@ -31,3 +31,12 @@ func (pr *purchaseRepo) GetByID(purchaseID int) (model.Purchase, error) {
 	}
 	return purchase, nil
 }
+
+// GetAll method to get all data purchase
+func (pr *purchaseRepo) GetAll() ([]model.Purchase, error) {
+	purchases := []model.Purchase{}
+	if err := pr.Conn.Find(&purchases).Error; err != nil {
+		return purchases, err
+	}
+	return purchases, nil
+}

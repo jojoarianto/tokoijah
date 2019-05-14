@@ -42,3 +42,12 @@ func (ps *purchaseService) GetByID(purchaseID int) (model.Purchase, error) {
 	}
 	return purchase, nil
 }
+
+// GetAll service to retrieve all data purchase
+func (ps *purchaseService) GetAll() ([]model.Purchase, error) {
+	purchases, err := ps.purchaseRepo.GetAll()
+	if err != nil {
+		return purchases, err
+	}
+	return purchases, nil
+}
