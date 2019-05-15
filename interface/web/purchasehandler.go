@@ -37,7 +37,10 @@ func addPurchase(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		return
 	}
 
-	RespondWithJSON(w, http.StatusCreated, purchase)
+	RespondWithJSON(w, http.StatusCreated, response{
+		Message:    MsgDataSuccessCreated,
+		StatusCode: http.StatusCreated,
+	})
 }
 
 func getPurchaseByID(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

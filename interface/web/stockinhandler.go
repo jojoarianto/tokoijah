@@ -42,12 +42,8 @@ func addStockIn(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		return
 	}
 
-	purchasesvc := service.NewPurchaseService(sqlite3.NewPurchaseRepo(db), sqlite3.NewProductRepo(db))
-	purchase, err := purchasesvc.GetByID(purchaseID)
-	if err != nil {
-		RespondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	RespondWithJSON(w, http.StatusCreated, purchase)
+	RespondWithJSON(w, http.StatusCreated, response{
+		Message:    MsgDataSuccessCreated,
+		StatusCode: http.StatusCreated,
+	})
 }
