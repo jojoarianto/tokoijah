@@ -190,3 +190,60 @@ func cxportStockOutToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Pa
 		StatusCode: 200,
 	})
 }
+
+func cxportSalesToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	conf := config.NewConfig(Dialeg, URIDbConn)
+	db, err := conf.ConnectDB()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
+	}
+	defer db.Close()
+
+	sales := []model.Sales{}
+	db.Preload("Items").Preload("Items.Product").Find(&sales)
+
+	csvData, err := os.Create("_csv/export_sales.csv")
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
+	}
+	defer csvData.Close()
+
+	writer := csv.NewWriter(csvData)
+
+	var record []string
+	record = append(record, "Waktu")
+	record = append(record, "SKU")
+	record = append(record, "Nama Barang")
+	record = append(record, "Jumlah Keluar")
+	record = append(record, "Harga Jual")
+	record = append(record, "Total")
+	record = append(record, "Harga Beli")
+	record = append(record, "Laba")
+	writer.Write(record)
+
+	for _, worker := range sales {
+		for idx, p := range worker.Items {
+			var record []string
+			waktu := ""
+			if idx == 0 {
+				waktu = worker.SalesTime.Format("2006-01-02 15:04:05")
+			}
+			record = append(record, waktu)
+			record = append(record, p.Product.Sku)
+			record = append(record, p.Product.Name)
+			record = append(record, strconv.Itoa(p.Qty))
+			record = append(record, strconv.Itoa(p.SellPrice))
+			record = append(record, strconv.Itoa(p.TotalPrice))
+			record = append(record, "")
+			record = append(record, "")
+			writer.Write(record)
+		}
+	}
+	writer.Flush()
+
+	RespondWithJSON(w, http.StatusCreated, response{
+		Message:    "Export data purchases to csv success check your export file at _csv/export_stockout.csv",
+		StatusCode: 200,
+	})
+}

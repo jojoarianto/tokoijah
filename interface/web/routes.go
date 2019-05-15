@@ -57,6 +57,7 @@ func Routes() *httprouter.Router {
 	r.GET("/export/products", exportProductToCSV)
 	r.GET("/export/purchases", exportPurchaseToCSV)
 	r.GET("/export/stockout", cxportStockOutToCSV)
+	r.GET("/export/sales", cxportSalesToCSV)
 
 	return r
 }
