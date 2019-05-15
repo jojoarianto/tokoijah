@@ -13,6 +13,12 @@ this is a case study which called "Toko Ijah" main domain of this case is Invent
 ### Architechture Design
 ![DDD Diagram](https://user-images.githubusercontent.com/5858756/57762643-0fdd3d80-772a-11e9-8fac-80ad6bf49b1e.png)
 
+### quick start
+clone this repository
+```bash
+git clone https://github.com/jojoarianto/tokoijah.git
+```
+
 ### run to play
 run download depedencies, compile & unit testing
 ```bash
