@@ -243,7 +243,7 @@ func cxportSalesToCSV(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 	writer.Flush()
 
 	RespondWithJSON(w, http.StatusCreated, response{
-		Message:    "Export data purchases to csv success check your export file at _csv/export_stockout.csv",
+		Message:    "Export data purchases to csv success check your export file at _csv/export_sales.csv",
 		StatusCode: 200,
 	})
 }
