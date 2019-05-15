@@ -41,3 +41,22 @@ func addSales(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		StatusCode: http.StatusCreated,
 	})
 }
+
+func getAllSales(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	conf := config.NewConfig(Dialeg, URIDbConn)
+	db, err := conf.ConnectDB()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, model.ErrInternalServerError.Error())
+		return
+	}
+	defer db.Close()
+
+	salessvc := service.NewSalesService(sqlite3.NewSalesRepo(db))
+	sales, err := salessvc.GetAll()
+	if err != nil {
+		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	RespondWithJSON(w, http.StatusOK, sales)
+}

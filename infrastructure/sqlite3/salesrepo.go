@@ -22,3 +22,12 @@ func (sr *salesRespo) Add(sales model.Sales) error {
 	}
 	return nil
 }
+
+// GetAll method to get all data sales
+func (sr *salesRespo) GetAll() ([]model.Sales, error) {
+	sales := []model.Sales{}
+	if err := sr.Conn.Preload("Items").Preload("Items.Product").Find(&sales).Error; err != nil {
+		return sales, err
+	}
+	return sales, nil
+}

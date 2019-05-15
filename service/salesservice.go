@@ -24,3 +24,12 @@ func (ps *salesService) Add(sales model.Sales) error {
 	}
 	return nil
 }
+
+// GetAll service to retrieve all data sales
+func (ps *salesService) GetAll() ([]model.Sales, error) {
+	sales, err := ps.salesRepo.GetAll()
+	if err != nil {
+		return sales, err
+	}
+	return sales, nil
+}

@@ -7,4 +7,5 @@ import (
 // SalesService contract
 type SalesService interface {
 	Add(model.Sales) error
+	GetAll() ([]model.Sales, error)
 }
