@@ -13,4 +13,6 @@ var (
 	ErrBadParamInput = errors.New("Given Param is not valid")
 	// ErrTrxFail will throw message that transaction fail
 	ErrTrxFail = errors.New("Given Param is not valid")
+	// ErrNotEnoughStock will throw message that stock not enough
+	ErrNotEnoughStock = errors.New("Not enough stock to out")
 )

@@ -11,11 +11,10 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func addSales(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	sales := model.Sales{}
-
+func addStockOut(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	stockout := model.StockOut{}
 	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&sales); err != nil {
+	if err := decoder.Decode(&stockout); err != nil {
 		RespondWithError(w, http.StatusBadRequest, model.ErrBadParamInput.Error())
 		return
 	}
@@ -29,10 +28,10 @@ func addSales(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	defer db.Close()
 
-	salessvc := service.NewSalesService(sqlite3.NewSalesRepo(db))
-	err = salessvc.Add(sales)
+	stockoutsvc := service.NewStockOutService(sqlite3.NewStockOutRepo(db))
+	err = stockoutsvc.Add(stockout)
 	if err != nil {
-		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 

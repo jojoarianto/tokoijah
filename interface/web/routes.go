@@ -13,6 +13,8 @@ const (
 	URIDbConn = "tokoijah.sqlite3"
 	// Dialeg driver
 	Dialeg = "sqlite3"
+	// MsgSuccessCreated msg for success created
+	MsgDataSuccessCreated = "Created success"
 )
 
 // Run start server
@@ -40,6 +42,9 @@ func Routes() *httprouter.Router {
 
 	// Route for StockIn
 	r.POST("/purchases/:purchase_id/stockin", addStockIn)
+
+	// Route for StockOut
+	r.POST("/stockout", addStockOut)
 
 	// Route for Sales
 	r.POST("/sales", addSales)

@@ -18,19 +18,11 @@ func NewStockInService(stockinrepo repository.StockInRepo) *stockInService {
 
 // Add service to create new purchase
 func (ss *stockInService) Add(purchaseID int, stockin model.StockIn) error {
-	// check purchase valid
-	// purchase, err := ss.purchaseRepo.GetByID(purchaseID)
-	// if err != nil {
-	// 	return err
-	// }
-
 	stockin.PurchaseID = purchaseID
 	err := ss.stockInRepo.Add(stockin)
 	if err != nil {
 		return err
 	}
-
-	// update stock
 
 	return nil
 }
