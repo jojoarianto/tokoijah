@@ -1,0 +1,16 @@
+# compile/install golang app shell
+
+# download dependencies
+echo ">> download dependencies ...."
+go mod download
+echo ">> download dependencies done"
+
+# run compile to binary
+echo ">> run build ...."
+go build -o bin/main main.go
+echo ">> run build done"
+
+# run test script here
+# echo ">> run testing ...."
+# go test ./...
+# echo ">> run testing done"
